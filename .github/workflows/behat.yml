@@ -20,7 +20,7 @@ jobs:
   behat:
     name: Run updates
     runs-on: ubuntu-latest
-    if: ${{ contains(${{ secrets.sites }}, ${{ secrets.site }}) }}
+    if: ${{ contains( secrets.sites, secrets.site) }}
     steps:
       - uses: actions/checkout@v1
       - name: Extract branch name
