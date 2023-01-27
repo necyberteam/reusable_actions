@@ -93,7 +93,7 @@ jobs:
           lando blt amp:behat $SITE
         env:
           SITE: ${{ secrets.site }}
-       - name: Assign variable
+      - name: Assign variable
         id: prnum
         run: echo '::set-output name=secret::${{secrets.prnum}}'
       - name: Comment on pull request
