@@ -93,24 +93,25 @@ jobs:
           lando blt amp:behat $SITE
         env:
           SITE: ${{ secrets.site }}
-      - name: Assign variable
+      - name: Set the value of prnum
         id: prnum
-        run: echo '::set-output name=secret::${{secrets.prnum}}'
+        run: |
+          echo "prnum=:${{ secrets.prnum }}" >> $GITHUB_ENV
       - name: Comment on pull request
-        if: "${{ steps.secret.outputs.prnum  != '' }}"
+        if: "${{ env.prnum  != '' }}"
         run: |
           gh pr comment $prnum --body "Behat Test on $SITE was Successful"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          prnum: ${{ secrets.prnum }}
+          prnum: ${{ env.prnum }}
           SITE: ${{ secrets.site }}
       - name: Comment on pull request
-        if: "${{ steps.secret.outputs.prnum  != '' &&  failure() }}"
+        if: "${{ env.prnum  != '' &&  failure() }}"
         run: |
           gh pr comment $prnum --body "Behat Test on $SITE Failed"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          prnum: ${{ secrets.prnum }}
+          prnum: ${{ env.prnum }}
           SITE: ${{ secrets.site }}
       - name: Slack Notification Success
         uses: rtCamp/action-slack-notify@v2
