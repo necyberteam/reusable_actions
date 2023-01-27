@@ -10,6 +10,8 @@ on:
         description: "Pull request number"
       gh_token:
         description: "A github token"
+      LANDO_ENV:
+        description: "Lando environment variables"
 permissions:
   contents: write
   actions: read
