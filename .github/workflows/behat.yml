@@ -93,7 +93,7 @@ jobs:
         env:
           SITE: ${{ secrets.site }}
       - name: Comment on pull request
-        if: "${{ prnum != '' }}"
+        if: "${{ github.event.inputs.prnum  != '' }}"
         run: |
           gh pr comment $prnum --body "Behat Test on $SITE was Successful"
         env:
@@ -101,7 +101,7 @@ jobs:
           prnum: ${{ secrets.prnum }}
           SITE: ${{ secrets.site }}
       - name: Comment on pull request
-        if: "${{ prnum != '' &&  failure() }}"
+        if: "${{ github.event.inputs.prnum  != '' &&  failure() }}"
         run: |
           gh pr comment $prnum --body "Behat Test on $SITE Failed"
         env:
