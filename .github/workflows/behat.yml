@@ -1,6 +1,13 @@
 name: (M) Behat Tests
 on:
   workflow_call:
+    secrets:
+      sites:
+        description: "Site to run tests on"
+      database:
+        description: "Database to pull in, normally blank"
+      prnum:
+        description: "Pull request number"
 permissions:
   contents: write
   actions: read
