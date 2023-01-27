@@ -1,15 +1,6 @@
 name: (M) Behat Tests
 on:
   workflow_call:
-    inputs:
-      database:
-        description: 'Recent database dump to use (leave blank to use artifact)'
-      sites:
-        description: 'Specify which sites to test or leave the default to run all tests.'
-        default: 'cci, asp, champ, coco, usrse, careers, gpc, ky, nect'
-        required: true
-      prnum:
-        description: 'Pull request number — adds a comment to a pull request (nomally empty)'
 permissions:
   contents: write
   actions: read
@@ -84,36 +75,36 @@ jobs:
           cd web/themes/custom/accesstheme && lando npm install && lando npm run build:sass
           git branch
         env:
-          database: ${{ github.event.inputs.database }}
+          database: ${{ secrets.database }}
           drupal_update: ${{ github.event.inputs.drupal_update }}
           gh_token: ${{ secrets.GH_TOKEN_REPO }}
       - name: Run careers test
         run: |
           vendor/bin/blt amp:behat $SITE
         env:
-          SITE: ${{ github.event.inputs.sites }}
+          SITE: ${{ secrets.sites }}
       - name: Comment on pull request
         if: "${{ github.event.inputs.prnum != '' }}"
         run: |
           gh pr comment $prnum --body "Behat Test on $SITE was Successful"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          prnum: ${{ github.event.inputs.prnum }}
-          SITE: ${{ github.event.inputs.sites }}
+          prnum: ${{ secrets.prnum }}
+          SITE: ${{ secrets.sites }}
       - name: Comment on pull request
         if: "${{ github.event.inputs.prnum != '' &&  failure() }}"
         run: |
           gh pr comment $prnum --body "Behat Test on $SITE Failed"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          prnum: ${{ github.event.inputs.prnum }}
-          SITE: ${{ github.event.inputs.sites }}
+          prnum: ${{ secrets.prnum }}
+          SITE: ${{ secrets.sites }}
       - name: Slack Notification Success
         uses: rtCamp/action-slack-notify@v2
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_MESSAGE: 'success :rocket:'
-          SLACK_TITLE: "Github action: behat ${{ github.event.inputs.sites }}"
+          SLACK_TITLE: "Github action: behat ${{ secrets.sites }}"
           SLACK_CHANNEL: behat-git-notifications
       - name: Slack Notification Fail
         uses: rtCamp/action-slack-notify@v2
@@ -121,7 +112,7 @@ jobs:
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_MESSAGE: ':octagonal_sign: behat tests failed :octagonal_sign:'
-          SLACK_TITLE: "Github action: behat ${{ github.event.inputs.sites }}"
+          SLACK_TITLE: "Github action: behat ${{ secrets.sites }}"
           SLACK_CHANNEL: behat-git-notifications
       - name: Slack Notification Fail
         uses: MeilCli/slack-upload-file@v2
