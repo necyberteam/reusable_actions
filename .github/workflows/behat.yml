@@ -18,14 +18,10 @@ permissions:
   pull-requests: write
 jobs:
   behat:
-    name: Run updates
+    name: Run behat tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - name: Extract branch name
-        shell: bash
-        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-        id: extract_branch
       - name: Install Lando
         run: |
           sudo curl -fsSL -o /usr/local/bin/lando "https://files.lando.dev/cli/lando-linux-x64-v3.10.0"
@@ -88,9 +84,10 @@ jobs:
         env:
           database: ${{ secrets.database }}
           gh_token: ${{ secrets.gh_token }}
-      - name: Run careers test
+      - name: Run behat test
         run: |
-          vendor/bin/blt amp:behat $SITE
+          ls
+          lando blt amp:behat $SITE
         env:
           SITE: ${{ secrets.site }}
       - name: Comment on pull request
