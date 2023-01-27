@@ -98,7 +98,7 @@ jobs:
       - name: Set the value of prnum
         id: prnum
         run: |
-          echo "prnum=:${{ secrets.prnum }}" >> $GITHUB_ENV
+          echo "prnum=${{ secrets.prnum }}" >> $GITHUB_ENV
       - name: Comment on pull request
         if: "${{ env.prnum  != '' }}"
         run: |
