@@ -2,8 +2,6 @@ name: (M) Behat Tests
 on:
   workflow_call:
     secrets:
-      sites:
-        description: "Sites selected by the user"
       site:
         description: "Site to run tests on"
       database:
@@ -20,7 +18,6 @@ jobs:
   behat:
     name: Run updates
     runs-on: ubuntu-latest
-    if: ${{ contains( secrets.sites, secrets.site) }}
     steps:
       - uses: actions/checkout@v1
       - name: Extract branch name
