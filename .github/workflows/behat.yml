@@ -89,6 +89,7 @@ jobs:
       - name: Run behat test
         run: |
           pwd
+          lando ssh -c 'pwd'
           lando blt amp:behat $SITE
         env:
           SITE: ${{ secrets.site }}
