@@ -12,6 +12,8 @@ on:
         description: "A github token"
       LANDO_ENV:
         description: "Lando environment variables"
+      SLACK_WEBHOOK:
+        description: "Slack webhook to communicate with api"
 permissions:
   contents: write
   actions: read
@@ -91,7 +93,7 @@ jobs:
         env:
           SITE: ${{ secrets.site }}
       - name: Comment on pull request
-        if: "${{ secrets.prnum != '' }}"
+        if: "${{ prnum != '' }}"
         run: |
           gh pr comment $prnum --body "Behat Test on $SITE was Successful"
         env:
@@ -99,7 +101,7 @@ jobs:
           prnum: ${{ secrets.prnum }}
           SITE: ${{ secrets.site }}
       - name: Comment on pull request
-        if: "${{ secrets.prnum != '' &&  failure() }}"
+        if: "${{ prnum != '' &&  failure() }}"
         run: |
           gh pr comment $prnum --body "Behat Test on $SITE Failed"
         env:
