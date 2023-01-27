@@ -93,8 +93,11 @@ jobs:
           lando blt amp:behat $SITE
         env:
           SITE: ${{ secrets.site }}
+       - name: Assign variable
+        id: prnum
+        run: echo '::set-output name=secret::${{secrets.prnum}}'
       - name: Comment on pull request
-        if: "${{ github.event.inputs.prnum  != '' }}"
+        if: "${{ steps.secret.outputs.prnum  != '' }}"
         run: |
           gh pr comment $prnum --body "Behat Test on $SITE was Successful"
         env:
@@ -102,7 +105,7 @@ jobs:
           prnum: ${{ secrets.prnum }}
           SITE: ${{ secrets.site }}
       - name: Comment on pull request
-        if: "${{ github.event.inputs.prnum  != '' &&  failure() }}"
+        if: "${{ steps.secret.outputs.prnum  != '' &&  failure() }}"
         run: |
           gh pr comment $prnum --body "Behat Test on $SITE Failed"
         env:
