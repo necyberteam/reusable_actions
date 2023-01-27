@@ -86,12 +86,12 @@ jobs:
           gh_token: ${{ secrets.gh_token }}
       - name: Run behat test
         run: |
-          ls
+          pwd
           lando blt amp:behat $SITE
         env:
           SITE: ${{ secrets.site }}
       - name: Comment on pull request
-        if: "${{ github.event.inputs.prnum != '' }}"
+        if: "${{ secrets.prnum != '' }}"
         run: |
           gh pr comment $prnum --body "Behat Test on $SITE was Successful"
         env:
@@ -99,7 +99,7 @@ jobs:
           prnum: ${{ secrets.prnum }}
           SITE: ${{ secrets.site }}
       - name: Comment on pull request
-        if: "${{ github.event.inputs.prnum != '' &&  failure() }}"
+        if: "${{ secrets.prnum != '' &&  failure() }}"
         run: |
           gh pr comment $prnum --body "Behat Test on $SITE Failed"
         env:
