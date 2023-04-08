@@ -72,8 +72,7 @@ jobs:
           cp blt/lando.local.settings.php web/sites/default/settings/local.settings.php
           cd web
           lando drush cr
-          lando drush cim -y
-          lando drush cr
+          lando drush deploy
           cd ..
           #todo: Grab files later here
           vendor/bin/blt gh:pullfiles
