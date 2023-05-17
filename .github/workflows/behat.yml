@@ -75,7 +75,7 @@ jobs:
           lando drush deploy
           cd ..
           #todo: Grab files later here
-          vendor/bin/blt gh:pullfiles
+          lando blt gh:pullfiles
           echo "#! /bin/bash
           if [[ '$database' != '' ]]
           then
