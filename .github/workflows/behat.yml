@@ -55,7 +55,7 @@ jobs:
           lando composer self-update
           lando composer config -g github-oauth.github.com $gh_token
           composer config -g github-oauth.github.com $gh_token
-          lando composer install --ignore-platform-reqs
+          lando composer install --ignore-platform-reqs --prefer-dist -n
           echo "#! /bin/bash
           if [[ '$database' == '' ]]
           then
