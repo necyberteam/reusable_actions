@@ -89,6 +89,7 @@ jobs:
         env:
           database: ${{ secrets.database }}
           gh_token: ${{ secrets.gh_token }}
+          GITHUB_TOKEN: ${{ secrets.gh_token }}
       - name: Run behat test
         run: |
           pwd
