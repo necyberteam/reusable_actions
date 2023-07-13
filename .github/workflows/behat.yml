@@ -33,7 +33,7 @@ jobs:
         uses: necyberteam/amp_lando_start@main
         with:
           DATABASE: ${{ secrets.DATABASE }}
-          GH_TOKEN_REPO: ${{ secrets.GH_TOKEN_REPO }}
+          GH_TOKEN_REPO: ${{ secrets.gh_token }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run behat test
