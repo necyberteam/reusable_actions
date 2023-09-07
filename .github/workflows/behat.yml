@@ -27,68 +27,15 @@ jobs:
     name: Run behat tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - name: Install Lando
-        run: |
-          sudo curl -fsSL -o /usr/local/bin/lando "https://files.lando.dev/cli/lando-linux-x64-v3.18.0"
-          sudo chmod +x /usr/local/bin/lando
-      - name: Setup Lando cache
-        uses: actions/cache@v2
+      - uses: actions/checkout@v3
+
+      - id: Lando
+        uses: necyberteam/amp_lando_start@v1
         with:
-          path: ~/.lando/cache
-          key: ${{ runner.os }}-lando${{ matrix.lando.version }}-${{ github.ref }}
-          restore-keys: |
-            ${{ runner.os }}-lando${{ matrix.lando.version }}-1
-      - name: Start Lando
-        run: |
-          echo "$lando_env" > .env
-          echo "GITHUB_TOKEN=$GITHUB_ACTOR:$GITHUB_TOKEN" >> .env
-          lando destroy -y
-          lando start && lando xdebug-off
-        env:
-          lando_env: ${{ secrets.LANDO_ENV }}
+          DATABASE: ${{ secrets.DATABASE }}
+          GH_TOKEN_REPO: ${{ secrets.gh_token }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_ACTOR: ${{ secrets.GITHUB_ACTOR }}
-      - name: Sync DB
-        run: |
-          mkdir backups
-          lando composer self-update
-          lando composer config -g github-oauth.github.com $gh_token
-          composer config -g github-oauth.github.com $gh_token
-          lando composer install --ignore-platform-reqs --prefer-dist -n
-          echo "#! /bin/bash
-          if [[ '$database' == '' ]]
-          then
-            lando blt gh:pulldb
-          else
-            wget -O backups/site.sql.gz '$database'
-          fi" > pull_db.sh
-          cat pull_db.sh
-          chmod u+x pull_db.sh
-          ./pull_db.sh
-          rm pull_db.sh
-          lando db-import backups/site.sql.gz
-          mkdir -p web/sites/default/settings
-          cp blt/lando.local.settings.php web/sites/default/settings/local.settings.php
-          cd web
-          lando drush cr
-          lando drush deploy
-          cd ..
-          #todo: Grab files later here
-          lando blt gh:pullfiles
-          echo "#! /bin/bash
-          if [[ '$database' != '' ]]
-          then
-            lando drush sql-sanitize --sanitize-password -y
-          fi" > clean_db.sh
-          chmod u+x clean_db.sh
-          ./clean_db.sh
-          rm clean_db.sh
-          cd web/themes/custom/accesstheme && lando npm install && lando npm run build:sass
-          git branch
-        env:
-          database: ${{ secrets.database }}
-          gh_token: ${{ secrets.gh_token }}
+
       - name: Run behat test
         run: |
           pwd
@@ -96,6 +43,7 @@ jobs:
           lando blt amp:behat $SITE
         env:
           SITE: ${{ secrets.site }}
+
       - name: Slack Notification Fail
         uses: MeilCli/slack-upload-file@v2
         if: failure()
