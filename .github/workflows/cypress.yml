@@ -50,7 +50,7 @@ jobs:
         if: failure()
         with:
           slack_token: ${{ secrets.SLACK_TOKEN }}
-          channels: behat-git-notifications
+          channels: cypress-git-notifications
           file_path: 'tests/cypress/cypress/screenshots/*'
           file_type: 'images'
           initial_comment: 'Files found in tests/cypress/cypress/screenshots, for help in diagnosing test failures'
