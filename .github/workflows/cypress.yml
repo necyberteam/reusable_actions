@@ -22,27 +22,30 @@ permissions:
   contents: write
   actions: read
   pull-requests: write
+
 jobs:
+
+  confirm-tests-exist:
+    name: Confirm tests exist
+    runs-on: ubuntu-latest
+    steps:
+      - name: No cypress tests found in tests/cypress/cypress/e2e/ subfolder
+        run: |
+          echo "No cypress tests found in tests/cypress/cypress/e2e/ subfolder"
+          exit -1
+        if: ${{ hashFiles('tests/cypress/cypress/e2e/${{ secrets.site }}/*') == '' }}
+
   cypress:
+    needs: confirm-tests-exist
     name: Run cypress tests
     runs-on: ubuntu-latest
-
     steps:
-      - name: check for tests
-        run: |
-          echo "No cypress tests found in tests/cypress/cypress/e2e/accessmatch/"
-          exit -1
-        if: ${{ hashFiles('tests/cypress/cypress/e2e/accessmatch/*') == '' }}
-
-      - uses: actions/checkout@v3
-
       - id: Lando
         uses: necyberteam/amp_lando_start@v2
         with:
           DATABASE: ${{ secrets.DATABASE }}
           GH_TOKEN_REPO: ${{ secrets.gh_token }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Run cypress test
         run: |
           cd tests/cypress
@@ -51,17 +54,23 @@ jobs:
         env:
           SITE: ${{ secrets.site }}
 
-      - name: Upload screenshots to slack
-        uses: MeilCli/slack-upload-file@v2
-        if: ${{ hashFiles('tests/cypress/cypress/screenshots/**/*.png') != '' }}
-        with:
-          slack_token: ${{ secrets.SLACK_TOKEN }}
-          channels: cypress-git-notifications
-          file_path: 'tests/cypress/cypress/screenshots/**/*.png'
-          file_type: 'images'
-          initial_comment: 'Files found in tests/cypress/cypress/screenshots, for help in diagnosing test failures'
 
-      - name: No screenshots found
-        run: |
-          echo "No cypress screenshots found"
-        if: ${{ hashFiles('tests/cypress/cypress/screenshots/**/*.png') == '' }}
+  upload-screenshots:
+    needs: cypress
+    name: Upload screenshots to slack
+    runs-on: ubuntu-latest
+    steps:
+    - name: Upload screenshots to slack
+      uses: MeilCli/slack-upload-file@v2
+      if: ${{ hashFiles('tests/cypress/cypress/screenshots/**/*.png') != '' }}
+      with:
+        slack_token: ${{ secrets.SLACK_TOKEN }}
+        channels: cypress-git-notifications
+        file_path: 'tests/cypress/cypress/screenshots/**/*.png'
+        file_type: 'images'
+        initial_comment: 'Files found in tests/cypress/cypress/screenshots, for help in diagnosing test failures'
+    - name: No screenshots found
+      run: |
+        echo "No cypress screenshots found"
+      if: ${{ failure() && hashFiles('tests/cypress/cypress/screenshots/**/*.png') == '' }}
+
