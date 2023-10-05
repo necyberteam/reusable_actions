@@ -30,6 +30,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
+      - name: look for cypress tests found in tests/cypress/cypress/e2e/accessmatch subfolder
+        run: |
+          echo pwd
+          pwd
+          echo ls -ald
+          ls -ald
+          echo find tests/cypress/cypress/e2e/
+          find tests/cypress/cypress/e2e/
+
       - name: Give error if no cypress tests found in tests/cypress/cypress/e2e/accessmatch subfolder
         run: |
           echo find tests/cypress/cypress/e2e/
