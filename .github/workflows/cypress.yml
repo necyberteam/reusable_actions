@@ -54,3 +54,8 @@ jobs:
           file_path: 'tests/cypress/cypress/screenshots/**/*.png'
           file_type: 'images'
           initial_comment: 'Files found in tests/cypress/cypress/screenshots, for help in diagnosing test failures'
+
+      - name: No screenshots found
+        run: |
+          echo "No cypress screenshots found"
+        if: ${{ hashFiles('tests/cypress/cypress/screenshots/**/*.png') == '' }}
