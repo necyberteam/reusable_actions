@@ -69,10 +69,14 @@ jobs:
       - name: ls
         if: failure()
         run: |
+          echo pwd
           pwd
+          echo find tests/cypress
+          find tests/cypress
+          echo ls -l tests/cypress/cypress/screenshots
           ls -l tests/cypress/cypress/screenshots
-          ls -l /app/tests/cypress/cypress/screenshots
-          find tests/cypress/cypress/
+          #ls -l /app/tests/cypress/cypress/screenshots
+          #find tests/cypress/cypress/
           find /app/tests/cypress/cypress/
           # tests\cypress\cypress\screenshots
 
