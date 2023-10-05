@@ -67,6 +67,7 @@ jobs:
           SITE: ${{ secrets.site }}
 
       - name: ls
+        if: failure()
         run: |
           pwd
           ls -l tests/cypress/cypress/screenshots
