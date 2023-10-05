@@ -27,6 +27,26 @@ jobs:
     name: Run cypress tests
     runs-on: ubuntu-latest
     steps:
+
+      - name: create a dummy3 file to test MeilCli slack notification
+        run: |
+          mkdir -p dummy_folder
+          echo "dummy3 file" > dummy_folder/dummy3.txt
+
+      - name: pwd
+        run: |
+          pwd
+
+      - name: Slack Notification with MeilCli/slack-upload-file@v2 to behat channel
+        uses: MeilCli/slack-upload-file@v2
+        with:
+          slack_token: ${{ secrets.SLACK_TOKEN }}
+          channels: behat-git-notifications
+          file_path: 'dummy_folder/*'
+          file_type: 'text'
+          initial_comment: 'Files found in dummy_folder/*'
+
+
       - uses: actions/checkout@v3
 
       - id: Lando
@@ -45,10 +65,6 @@ jobs:
           popd
         env:
           SITE: ${{ secrets.site }}
-
-      - name: pwd
-        run: |
-          pwd
 
       - name: Slack Notification Fail
         uses: MeilCli/slack-upload-file@v2
