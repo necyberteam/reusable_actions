@@ -30,8 +30,8 @@ jobs:
     steps:
       - name: check for tests
         run: |
-          echo "No accessmatch tests found"
-          if: ${{ hashFiles('tests/cypress/cypress/e2e/accessmatch/*') != '' }}
+          echo "No cypress tests found in tests/cypress/cypress/e2e/accessmatch/"
+          if: ${{ hashFiles('tests/cypress/cypress/e2e/accessmatch/*') == '' }}
           exit 0
 
       - uses: actions/checkout@v3
