@@ -29,12 +29,12 @@ jobs:
     name: look for tests exist
     runs-on: ubuntu-latest
     steps:
-      - name: look for tests in tests/cypress/cypress/e2e/accessmatch subfolder
+      - name: look for tests in tests/cypress/cypress/e2e subfolder
         run: |
           echo pwd
           pwd
-          echo find tests/cypress/cypress/e2e/accessmatch
-          find tests/cypress/cypress/e2e/accessmatch
+          echo find tests/cypress/cypress/e2e
+          find tests/cypress/cypress/e2e
 
   confirm-tests-exist:
     name: Confirm tests exist
