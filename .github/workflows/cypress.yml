@@ -45,9 +45,9 @@ jobs:
         env:
           SITE: ${{ secrets.site }}
 
-      - name: Slack Notification Fail
+      - name: Upload screenshots to slack
         uses: MeilCli/slack-upload-file@v2
-        if: failure()
+        if: ${{ hashFiles('tests/cypress/cypress/screenshots/**/*.png') != '' }}
         with:
           slack_token: ${{ secrets.SLACK_TOKEN }}
           channels: cypress-git-notifications
