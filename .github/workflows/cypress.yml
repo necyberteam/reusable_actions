@@ -30,13 +30,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: No cypress tests found in tests/cypress/cypress/e2e/ subfolder
+      - name: No cypress tests found in tests/cypress/cypress/e2e/accessmatch subfolder
         run: |
           echo find tests/cypress/cypress/e2e/accessmatch
           find tests/cypress/cypress/e2e/accessmatch
           echo "No cypress tests found in tests/cypress/cypress/e2e/accessmatch subfolder"
           exit -1
-        if: ${{ hashFiles('tests/cypress/cypress/e2e/${{ secrets.site }}/*') == '' }}
+        if: ${{ hashFiles('tests/cypress/cypress/e2e/accessmatch/*') == '' }}
 
   cypress:
     needs: checkout-and-find-tests
