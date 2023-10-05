@@ -28,25 +28,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-      - name: create a dummy3 file to test MeilCli slack notification
-        run: |
-          mkdir -p dummy_folder
-          echo "dummy3 file" > dummy_folder/dummy3.txt
-
-      - name: pwd
-        run: |
-          pwd
-
-      - name: Slack Notification with MeilCli/slack-upload-file@v2 to behat channel
-        uses: MeilCli/slack-upload-file@v2
-        with:
-          slack_token: ${{ secrets.SLACK_TOKEN }}
-          channels: behat-git-notifications
-          file_path: 'dummy_folder/*'
-          file_type: 'text'
-          initial_comment: 'Files found in dummy_folder/*'
-
-
       - uses: actions/checkout@v3
 
       - id: Lando
@@ -58,47 +39,18 @@ jobs:
 
       - name: Run cypress test
         run: |
-          pushd tests/cypress
-          pwd
+          cd tests/cypress
           lando ssh -c 'pwd'
           lando cypress run --config baseUrl=https://${{ secrets.site }}-local.cnctci.lndo.site -s **/${{ secrets.site }}/*
-          popd
         env:
           SITE: ${{ secrets.site }}
-
-      - name: ls
-        if: failure()
-        run: |
-          echo whomai
-          whoami
-          echo pwd
-          pwd
-          echo find tests/cypress/cypress
-          find tests/cypress/cypress
-          echo ls -la tests/cypress/cypress/screenshots
-          ls -la tests/cypress/cypress/screenshots
-          #ls -l /app/tests/cypress/cypress/screenshots
-          #find tests/cypress/cypress/
-          find /app/tests/cypress/cypress/
-          # tests\cypress\cypress\screenshots
-
-
-      - name: Slack Notification with MeilCli/slack-upload-file@v2 to behat channel
-        uses: MeilCli/slack-upload-file@v2
-        with:
-          slack_token: ${{ secrets.SLACK_TOKEN }}
-          channels: behat-git-notifications
-          file_path: 'tests/cypress/cypress/screenshots/**/*.png'
-          file_type: 'text'
-          initial_comment: 'Files found in tests/cypress/cypress/screenshots/*.png'
-
 
       - name: Slack Notification Fail
         uses: MeilCli/slack-upload-file@v2
         if: failure()
         with:
           slack_token: ${{ secrets.SLACK_TOKEN }}
-          channels: behat-git-notifications
+          channels: cypress-git-notifications
           file_path: 'tests/cypress/cypress/screenshots/**/*.png'
           file_type: 'images'
           initial_comment: 'Files found in tests/cypress/cypress/screenshots, for help in diagnosing test failures'
