@@ -25,18 +25,19 @@ permissions:
 
 jobs:
 
+  # TODO -- use ${{secrets.site}} instead of hardcoding accessmatch.  I tried, but it didn't work.
+
   cypress:
     name: run cypress tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
 
-      - name: Give notice if no cypress tests found in tests/cypress/cypress/e2e/accessmatch subfolder
+      - name: if this action runs, then no cypress tests found in tests/cypress/cypress/e2e/accessmatch subfolder
         run: |
           echo find tests/cypress/cypress/e2e/
           find tests/cypress/cypress/e2e/
           echo "No cypress tests found in tests/cypress/cypress/e2e/accessmatch subfolder"
-          exit 0
         if: ${{ hashFiles('tests/cypress/cypress/e2e/accessmatch/*') == '' }}
 
       - id: Lando
@@ -66,7 +67,7 @@ jobs:
           file_type: 'images'
           initial_comment: 'Files found in tests/cypress/cypress/screenshots, for help in diagnosing test failures'
 
-      - name: Tests failed, but no screenshots found
+      - name: if this action runs, then cypress tests failed, but no screenshots found
         if: ${{ failure() && !cancelled() && hashFiles('tests/cypress/cypress/screenshots/**/*.png') == '' }}
         run: |
           echo "No cypress screenshots found"
