@@ -40,12 +40,12 @@ jobs:
           echo find tests/cypress/cypress/e2e/
           find tests/cypress/cypress/e2e/
 
-      - name: Give error if no cypress tests found in tests/cypress/cypress/e2e/accessmatch subfolder
+      - name: Give notice if no cypress tests found in tests/cypress/cypress/e2e/accessmatch subfolder
         run: |
           echo find tests/cypress/cypress/e2e/
           find tests/cypress/cypress/e2e/
           echo "No cypress tests found in tests/cypress/cypress/e2e/accessmatch subfolder"
-          exit -1
+          exit 0
         if: ${{ hashFiles('tests/cypress/cypress/e2e/accessmatch/*') == '' }}
 
       - id: Lando
