@@ -69,10 +69,12 @@ jobs:
       - name: ls
         if: failure()
         run: |
+          echo whomai
+          whoami
           echo pwd
           pwd
-          echo find tests/cypress
-          find tests/cypress
+          echo find tests/cypress/cypress
+          find tests/cypress/cypress
           echo ls -la tests/cypress/cypress/screenshots
           ls -la tests/cypress/cypress/screenshots
           #ls -l /app/tests/cypress/cypress/screenshots
@@ -81,12 +83,22 @@ jobs:
           # tests\cypress\cypress\screenshots
 
 
+      - name: Slack Notification with MeilCli/slack-upload-file@v2 to behat channel
+        uses: MeilCli/slack-upload-file@v2
+        with:
+          slack_token: ${{ secrets.SLACK_TOKEN }}
+          channels: behat-git-notifications
+          file_path: 'tests/cypress/cypress/screenshots/**/*.png'
+          file_type: 'text'
+          initial_comment: 'Files found in tests/cypress/cypress/screenshots/*.png'
+
+
       - name: Slack Notification Fail
         uses: MeilCli/slack-upload-file@v2
         if: failure()
         with:
           slack_token: ${{ secrets.SLACK_TOKEN }}
           channels: behat-git-notifications
-          file_path: 'tests/cypress/cypress/screenshots/*'
+          file_path: 'tests/cypress/cypress/screenshots/**/*.png'
           file_type: 'images'
           initial_comment: 'Files found in tests/cypress/cypress/screenshots, for help in diagnosing test failures'
