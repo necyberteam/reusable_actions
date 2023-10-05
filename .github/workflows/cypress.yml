@@ -66,6 +66,16 @@ jobs:
         env:
           SITE: ${{ secrets.site }}
 
+      - name: ls
+        run: |
+          pwd
+          ls -l tests/cypress/cypress/screenshots
+          ls -l /app/tests/cypress/cypress/screenshots
+          find tests/cypress/cypress/
+          find /app/tests/cypress/cypress/
+          # tests\cypress\cypress\screenshots
+
+
       - name: Slack Notification Fail
         uses: MeilCli/slack-upload-file@v2
         if: failure()
