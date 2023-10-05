@@ -36,7 +36,7 @@ jobs:
         uses: rtCamp/action-slack-notify@v2
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_MESSAGE: 'TEST MESSAGE'
+          SLACK_MESSAGE: 'TEST MESSAGE, repo = ${{ secrets.REPO }}'
           SLACK_TITLE: "TEST TITLE"
           SLACK_CHANNEL: cypress-git-notifications
 
@@ -78,6 +78,9 @@ jobs:
 
       - name: if this action runs, then cypress tests failed, but no screenshots found
         if: ${{ failure() && !cancelled() && hashFiles('tests/cypress/cypress/screenshots/**/*.png') == '' }}
-        run: |
-          echo "No cypress screenshots found"
-
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_MESSAGE: 'Cypress tests failed, but no screenshots found in tests/cypress/cypress/screenshots'
+          SLACK_TITLE: "Cypress failure, but no screenshots found"
+          SLACK_CHANNEL: cypress-git-notifications
