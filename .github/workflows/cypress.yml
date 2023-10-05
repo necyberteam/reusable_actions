@@ -31,11 +31,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-  look-for-tests:
-    needs: checkout
-    name: look for tests in tests/cypress/cypress/ subfolder
-    runs-on: ubuntu-latest
-    steps:
+  # look-for-tests:
+  #   needs: checkout
+  #   name: look for tests in tests/cypress/cypress/ subfolder
+  #   runs-on: ubuntu-latest
+  #   steps:
       - name: look for tests in tests/cypress/cypress/ subfolder
         run: |
           echo pwd
