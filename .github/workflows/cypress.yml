@@ -25,31 +25,11 @@ permissions:
 
 jobs:
 
-  checkout:
-    name: checkout the branch
+  checkout-and-find-tests:
+    name: checkout the branch and look for cypress tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-
-  # look-for-tests:
-  #   needs: checkout
-  #   name: look for tests in tests/cypress/cypress/ subfolder
-  #   runs-on: ubuntu-latest
-  #   steps:
-      - name: look for tests in tests/cypress/cypress/ subfolder
-        run: |
-          echo pwd
-          pwd
-          echo ls -al
-          ls -al
-          echo find tests/cypress/cypress/
-          find tests/cypress/cypress/
-
-  confirm-tests-exist:
-    needs: checkout
-    name: Confirm tests exist
-    runs-on: ubuntu-latest
-    steps:
       - name: No cypress tests found in tests/cypress/cypress/e2e/ subfolder
         run: |
           echo find tests/cypress/cypress/e2e/accessmatch
@@ -59,7 +39,7 @@ jobs:
         if: ${{ hashFiles('tests/cypress/cypress/e2e/${{ secrets.site }}/*') == '' }}
 
   cypress:
-    needs: confirm-tests-exist
+    needs: checkout-and-find-tests
     name: Run cypress tests
     runs-on: ubuntu-latest
     steps:
