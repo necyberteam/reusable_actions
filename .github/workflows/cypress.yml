@@ -31,7 +31,7 @@ jobs:
       - name: check for tests
         run: |
           echo "No cypress tests found in tests/cypress/cypress/e2e/accessmatch/"
-          exit 0
+          exit -1
         if: ${{ hashFiles('tests/cypress/cypress/e2e/accessmatch/*') == '' }}
 
       - uses: actions/checkout@v3
