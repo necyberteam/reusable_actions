@@ -73,8 +73,8 @@ jobs:
           pwd
           echo find tests/cypress
           find tests/cypress
-          echo ls -l tests/cypress/cypress/screenshots
-          ls -l tests/cypress/cypress/screenshots
+          echo ls -la tests/cypress/cypress/screenshots
+          ls -la tests/cypress/cypress/screenshots
           #ls -l /app/tests/cypress/cypress/screenshots
           #find tests/cypress/cypress/
           find /app/tests/cypress/cypress/
