@@ -38,10 +38,11 @@ jobs:
 
       - name: Run cypress test
         run: |
-          cd tests/cypress
+          pushd tests/cypress
           pwd
           lando ssh -c 'pwd'
           lando cypress run --config baseUrl=https://${{ secrets.site }}-local.cnctci.lndo.site -s **/${{ secrets.site }}/*
+          popd
         env:
           SITE: ${{ secrets.site }}
 
@@ -50,7 +51,9 @@ jobs:
         if: failure()
         with:
           slack_token: ${{ secrets.SLACK_TOKEN }}
-          channels: cypress-git-notifications
+          channels: behat-git-notifications
           file_path: 'tests/cypress/cypress/screenshots/*'
           file_type: 'images'
           initial_comment: 'Files found in tests/cypress/cypress/screenshots, for help in diagnosing test failures'
+
+
