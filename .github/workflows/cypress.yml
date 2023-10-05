@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: No cypress tests found in tests/cypress/cypress/e2e/accessmatch subfolder
+      - name: Give error if no cypress tests found in tests/cypress/cypress/e2e/accessmatch subfolder
         run: |
           echo find tests/cypress/cypress/e2e/accessmatch
           find tests/cypress/cypress/e2e/accessmatch
@@ -49,6 +49,7 @@ jobs:
           DATABASE: ${{ secrets.DATABASE }}
           GH_TOKEN_REPO: ${{ secrets.gh_token }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Run cypress test
         run: |
           cd tests/cypress
@@ -57,23 +58,18 @@ jobs:
         env:
           SITE: ${{ secrets.site }}
 
+      - name: Upload screenshots to slack
+        if: ${{ failure() && !cancelled() && hashFiles('tests/cypress/cypress/screenshots/**/*.png') != '' }}
+        uses: MeilCli/slack-upload-file@v2
+        with:
+          slack_token: ${{ secrets.SLACK_TOKEN }}
+          channels: cypress-git-notifications
+          file_path: 'tests/cypress/cypress/screenshots/**/*.png'
+          file_type: 'images'
+          initial_comment: 'Files found in tests/cypress/cypress/screenshots, for help in diagnosing test failures'
 
-  upload-screenshots:
-    needs: cypress
-    name: Upload screenshots to slack
-    runs-on: ubuntu-latest
-    steps:
-    - name: Upload screenshots to slack
-      uses: MeilCli/slack-upload-file@v2
-      if: ${{ hashFiles('tests/cypress/cypress/screenshots/**/*.png') != '' }}
-      with:
-        slack_token: ${{ secrets.SLACK_TOKEN }}
-        channels: cypress-git-notifications
-        file_path: 'tests/cypress/cypress/screenshots/**/*.png'
-        file_type: 'images'
-        initial_comment: 'Files found in tests/cypress/cypress/screenshots, for help in diagnosing test failures'
-    - name: No screenshots found
-      run: |
-        echo "No cypress screenshots found"
-      if: ${{ failure() && hashFiles('tests/cypress/cypress/screenshots/**/*.png') == '' }}
+      - name: No screenshots found
+        if: ${{ failure() && !cancelled() && hashFiles('tests/cypress/cypress/screenshots/**/*.png') == '' }}
+        run: |
+          echo "No cypress screenshots found"
 
