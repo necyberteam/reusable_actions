@@ -31,9 +31,10 @@ jobs:
     steps:
       - name: No cypress tests found in tests/cypress/cypress/e2e/ subfolder
         run: |
-          echo find tests/cypress/cypress/e2e/${{ secrets.site }}
-          find tests/cypress/cypress/e2e/${{ secrets.site }}
-          echo "No cypress tests found in tests/cypress/cypress/e2e/ subfolder"
+          echo find tests/cypress/cypress/e2e/accessmatch
+          tests\cypress\cypress\e2e\accessmatch
+          find tests/cypress/cypress/e2e/accessmatch
+          echo "No cypress tests found in tests/cypress/cypress/e2e/accessmatch subfolder"
           exit -1
         if: ${{ hashFiles('tests/cypress/cypress/e2e/${{ secrets.site }}/*') == '' }}
 
