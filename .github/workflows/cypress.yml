@@ -26,15 +26,17 @@ permissions:
 jobs:
 
   look-for-tests:
-    name: look for tests exist
+    name: look for tests in tests/cypress/cypress/ subfolder
     runs-on: ubuntu-latest
     steps:
-      - name: look for tests in tests/cypress/cypress/e2e subfolder
+      - name: look for tests in tests/cypress/cypress/ subfolder
         run: |
           echo pwd
           pwd
-          echo find tests/cypress/cypress/e2e
-          find tests/cypress/cypress/e2e
+          echo ls -al
+          ls -al
+          echo find tests/cypress/cypress/
+          find tests/cypress/cypress/
 
   confirm-tests-exist:
     name: Confirm tests exist
