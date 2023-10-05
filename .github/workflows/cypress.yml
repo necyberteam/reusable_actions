@@ -68,6 +68,14 @@ jobs:
           file_type: 'images'
           initial_comment: 'Files found in tests/cypress/cypress/screenshots, for help in diagnosing test failures'
 
+      - name: 'Upload screenshots Artifact'
+        if: ${{ failure() && !cancelled() && hashFiles('tests/cypress/cypress/screenshots/**/*.png') != '' }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: cypress-screenshots
+          path: tests/cypress/cypress/screenshots
+          retention-days: 10
+
       - name: if this action runs, then cypress tests failed, but no screenshots found
         if: ${{ failure() && !cancelled() && hashFiles('tests/cypress/cypress/screenshots/**/*.png') == '' }}
         uses: rtCamp/action-slack-notify@v2
