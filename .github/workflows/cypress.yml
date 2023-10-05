@@ -25,6 +25,17 @@ permissions:
 
 jobs:
 
+  look-for-tests:
+    name: look for tests exist
+    runs-on: ubuntu-latest
+    steps:
+      - name: look for tests in tests/cypress/cypress/e2e/accessmatch subfolder
+        run: |
+          echo pwd
+          pwd
+          echo find tests/cypress/cypress/e2e/accessmatch
+          find tests/cypress/cypress/e2e/accessmatch
+
   confirm-tests-exist:
     name: Confirm tests exist
     runs-on: ubuntu-latest
@@ -32,7 +43,6 @@ jobs:
       - name: No cypress tests found in tests/cypress/cypress/e2e/ subfolder
         run: |
           echo find tests/cypress/cypress/e2e/accessmatch
-          tests\cypress\cypress\e2e\accessmatch
           find tests/cypress/cypress/e2e/accessmatch
           echo "No cypress tests found in tests/cypress/cypress/e2e/accessmatch subfolder"
           exit -1
