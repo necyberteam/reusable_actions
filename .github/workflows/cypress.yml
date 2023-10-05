@@ -32,14 +32,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-      - name: Slack Notification tst
-        uses: rtCamp/action-slack-notify@v2
-        env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_MESSAGE: 'TEST MESSAGE, repo = ${{ secrets.REPO }}'
-          SLACK_TITLE: "TEST TITLE"
-          SLACK_CHANNEL: cypress-git-notifications
-
       - uses: actions/checkout@v3
 
       - name: if this action runs, then no cypress tests found in tests/cypress/cypress/e2e/accessmatch subfolder
