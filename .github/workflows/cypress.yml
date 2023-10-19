@@ -68,7 +68,7 @@ jobs:
           file_type: 'images'
           initial_comment: 'Files found in tests/cypress/cypress/screenshots, for help in diagnosing test failures'
 
-      - name: 'Upload screenshots Artifact'
+      - name: Upload screenshots Artifact
         if: ${{ failure() && !cancelled() && hashFiles('tests/cypress/cypress/screenshots/**/*.png') != '' }}
         uses: actions/upload-artifact@v3
         with:
@@ -84,3 +84,21 @@ jobs:
           SLACK_MESSAGE: 'Cypress tests failed, but no screenshots found in tests/cypress/cypress/screenshots'
           SLACK_TITLE: "Cypress failure, but no screenshots found"
           SLACK_CHANNEL: cypress-git-notifications
+
+      - name: Upload broken link log reports to slack
+        if: ${{ !cancelled() && hashFiles('tests/cypress/logs/*log.txt') != '' }}
+        uses: MeilCli/slack-upload-file@v2
+        with:
+          slack_token: ${{ secrets.SLACK_TOKEN }}
+          channels: cypress-git-notifications
+          file_path: 'tests/cypress/logs/*log.txt'
+          file_type: 'text'
+          initial_comment: 'Broken link reports in tests/cypress/logs'
+
+      - name: Upload an artifact containing broken link log reports
+        if: ${{ !cancelled() && hashFiles('tests/cypress/logs/*log.txt') != '' }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: cypress-broken-link-reports
+          path: tests/cypress/logs/*log.txt
+          retention-days: 10
