@@ -34,27 +34,27 @@ jobs:
 
       - uses: actions/checkout@v3
 
-      - name: if this action runs, then no cypress tests found in tests/cypress/cypress/e2e/accessmatch subfolder
+      - name: if this action runs, then no cypress tests found in tests/cypress/cypress/e2e/broken-links subfolder
         run: |
           echo find tests/cypress/cypress/e2e/
           find tests/cypress/cypress/e2e/
-          echo "No cypress tests found in tests/cypress/cypress/e2e/accessmatch subfolder"
-        if: ${{ hashFiles('tests/cypress/cypress/e2e/accessmatch/*') == '' }}
+          echo "No cypress tests found in tests/cypress/cypress/e2e/broken-links subfolder"
+        if: ${{ hashFiles('tests/cypress/cypress/e2e/broken-links/*') == '' }}
 
       - id: Lando
-        if: ${{ hashFiles('tests/cypress/cypress/e2e/accessmatch/*') != '' }}
+        if: ${{ hashFiles('tests/cypress/cypress/e2e/broken-links/*') != '' }}
         uses: necyberteam/amp_lando_start@v2
         with:
           DATABASE: ${{ secrets.DATABASE }}
           GH_TOKEN_REPO: ${{ secrets.gh_token }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Run cypress test
-        if: ${{ hashFiles('tests/cypress/cypress/e2e/accessmatch/*') != '' }}
+      - name: Run broken-links cypress test(s)
+        if: ${{ hashFiles('tests/cypress/cypress/e2e/broken-links/*') != '' }}
         run: |
           cd tests/cypress
           lando ssh -c 'pwd'
-          lando cypress run --config baseUrl=https://${{ secrets.site }}-local.cnctci.lndo.site -s **/${{ secrets.site }}/*
+          lando cypress run --config baseUrl=https://${{ secrets.site }}-local.cnctci.lndo.site -s **/broken-links/*
         env:
           SITE: ${{ secrets.site }}
 
@@ -84,3 +84,21 @@ jobs:
           SLACK_MESSAGE: 'Cypress tests failed, but no screenshots found in tests/cypress/cypress/screenshots'
           SLACK_TITLE: "Cypress failure, but no screenshots found"
           SLACK_CHANNEL: cypress-git-notifications
+
+      - name: Upload broken link log reports to slack
+        if: ${{ !cancelled() && hashFiles('tests/cypress/logs/*log.txt') != '' }}
+        uses: MeilCli/slack-upload-file@v2
+        with:
+          slack_token: ${{ secrets.SLACK_TOKEN }}
+          channels: cypress-git-notifications
+          file_path: 'tests/cypress/logs/*log.txt'
+          file_type: 'text'
+          initial_comment: 'Broken link reports in tests/cypress/logs'
+
+      - name: Upload an artifact containing broken link log reports
+        if: ${{ !cancelled() && hashFiles('tests/cypress/logs/*log.txt') != '' }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: cypress-broken-link-reports
+          path: tests/cypress/logs/*log.txt
+          retention-days: 10
