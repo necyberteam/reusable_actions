@@ -54,7 +54,7 @@ jobs:
         run: |
           cd tests/cypress
           lando ssh -c 'pwd'
-          lando cypress run --config baseUrl=https://${{ secrets.site }}-local.cnctci.lndo.site -s **/broken-links/*
+          lando cypress run --config baseUrl=https://${{ secrets.site }}-local.cnctci.lndo.site/ -s **/broken-links/*
         env:
           SITE: ${{ secrets.site }}
 
