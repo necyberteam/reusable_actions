@@ -70,7 +70,7 @@ jobs:
 
       - name: Upload screenshots Artifact
         if: ${{ failure() && !cancelled() && hashFiles('tests/cypress/cypress/screenshots/**/*.png') != '' }}
-        uses: actions/upload-artifact@v4.1.1
+        uses: actions/upload-artifact@v4.3.1
         with:
           name: cypress-screenshots
           path: tests/cypress/cypress/screenshots
