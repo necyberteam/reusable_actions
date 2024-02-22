@@ -27,7 +27,7 @@ jobs:
     name: Run behat tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4.1.1
 
       - id: Lando
         uses: necyberteam/amp_lando_start@v2
@@ -45,7 +45,7 @@ jobs:
           SITE: ${{ secrets.site }}
 
       - name: Slack Notification Fail
-        uses: MeilCli/slack-upload-file@v2
+        uses: MeilCli/slack-upload-file@v4.0.1
         if: failure()
         with:
           slack_token: ${{ secrets.SLACK_TOKEN }}

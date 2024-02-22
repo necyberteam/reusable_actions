@@ -32,7 +32,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4.1.1
 
       - name: if this action runs, then no cypress tests found in tests/cypress/cypress/e2e/accessmatch subfolder
         run: |
@@ -60,7 +60,7 @@ jobs:
 
       - name: Tests failed - upload screenshots to slack
         if: ${{ failure() && !cancelled() && hashFiles('tests/cypress/cypress/screenshots/**/*.png') != '' }}
-        uses: MeilCli/slack-upload-file@v2
+        uses: MeilCli/slack-upload-file@v4.0.1
         with:
           slack_token: ${{ secrets.SLACK_TOKEN }}
           channels: cypress-git-notifications
