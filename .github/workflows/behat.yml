@@ -49,7 +49,7 @@ jobs:
         if: failure()
         with:
           slack_token: ${{ secrets.SLACK_TOKEN }}
-          channels: behat-git-notifications
+          channel_id: behat-git-notifications
           file_path: 'tests/behat/screenshots/*.png'
           file_type: 'images'
           initial_comment: 'Files found in tests/behat/screenshots, for help in diagnosing behat failures'
