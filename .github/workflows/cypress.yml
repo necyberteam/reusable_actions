@@ -60,12 +60,11 @@ jobs:
 
       - name: Tests failed - upload screenshots to slack
         if: ${{ failure() && !cancelled() && hashFiles('tests/cypress/cypress/screenshots/**/*.png') != '' }}
-        uses: MeilCli/slack-upload-file@v4.0.1
+        uses: MeilCli/slack-upload-file@v4
         with:
           slack_token: ${{ secrets.SLACK_TOKEN }}
           channel_id: cypress-git-notifications
           file_path: 'tests/cypress/cypress/screenshots/**/*.png'
-          file_type: 'images'
           initial_comment: 'Files found in tests/cypress/cypress/screenshots, for help in diagnosing test failures'
 
       - name: Upload screenshots Artifact
