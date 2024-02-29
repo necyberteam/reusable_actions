@@ -63,7 +63,7 @@ jobs:
         uses: MeilCli/slack-upload-file@v4
         with:
           slack_token: ${{ secrets.SLACK_TOKEN }}
-          channel_id: TTX1EG9BJ
+          channel_id: C05UU6WN1V4
           file_path: 'tests/cypress/cypress/screenshots/**/*.png'
           initial_comment: 'Files found in tests/cypress/cypress/screenshots, for help in diagnosing test failures'
 
