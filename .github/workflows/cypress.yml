@@ -43,7 +43,7 @@ jobs:
 
       - id: Lando
         if: ${{ hashFiles('tests/cypress/cypress/e2e/accessmatch/*') != '' }}
-        uses: necyberteam/amp_lando_start@v2
+        uses: necyberteam/amp_lando_start@v2.2
         with:
           DATABASE: ${{ secrets.DATABASE }}
           GH_TOKEN_REPO: ${{ secrets.gh_token }}
