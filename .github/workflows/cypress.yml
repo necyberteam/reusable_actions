@@ -25,8 +25,6 @@ permissions:
 
 jobs:
 
-  # TODO -- use ${{secrets.site}} instead of hardcoding accessmatch.  I tried, but it didn't work.
-
   cypress:
     name: run cypress tests
     runs-on: ubuntu-latest
@@ -34,15 +32,7 @@ jobs:
 
       - uses: actions/checkout@v4.1.1
 
-      - name: if this action runs, then no cypress tests found in tests/cypress/cypress/e2e/accessmatch subfolder
-        run: |
-          echo find tests/cypress/cypress/e2e/
-          find tests/cypress/cypress/e2e/
-          echo "No cypress tests found in tests/cypress/cypress/e2e/accessmatch subfolder"
-        if: ${{ hashFiles('tests/cypress/cypress/e2e/accessmatch/*') == '' }}
-
       - id: Lando
-        if: ${{ hashFiles('tests/cypress/cypress/e2e/accessmatch/*') != '' }}
         uses: necyberteam/amp_lando_start@v2.2
         with:
           DATABASE: ${{ secrets.DATABASE }}
@@ -50,11 +40,20 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run cypress test
-        if: ${{ hashFiles('tests/cypress/cypress/e2e/accessmatch/*') != '' }}
+        if: ${{ !startsWith(secrets.site, 'accessmatch') }}
         run: |
           cd tests/cypress
           lando ssh -c 'pwd'
           lando cypress run --config baseUrl=https://${{ secrets.site }}-local.cnctci.lndo.site -s **/${{ secrets.site }}/**
+        env:
+          SITE: ${{ secrets.site }}
+
+      - name: Run cypress test
+        if: ${{ startsWith(secrets.site, 'accessmatch') }}
+        run: |
+          cd tests/cypress
+          lando ssh -c 'pwd'
+          lando cypress run --config baseUrl=https://accessmatch-local.cnctci.lndo.site -s **/${{ secrets.site }}/**
         env:
           SITE: ${{ secrets.site }}
 
