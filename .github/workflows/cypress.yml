@@ -40,7 +40,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run cypress test
-        if: ${{ !startsWith(secrets.site, 'accessmatch') }}
+        if: ${{ !startsWith(SITE, 'accessmatch') }}
         run: |
           cd tests/cypress
           lando ssh -c 'pwd'
@@ -49,7 +49,7 @@ jobs:
           SITE: ${{ secrets.site }}
 
       - name: Run cypress test
-        if: ${{ startsWith(secrets.site, 'accessmatch') }}
+        if: ${{ startsWith(SITE, 'accessmatch') }}
         run: |
           cd tests/cypress
           lando ssh -c 'pwd'
