@@ -71,7 +71,7 @@ jobs:
         if: ${{ failure() && !cancelled() && hashFiles('tests/cypress/cypress/screenshots/**/*.png') != '' }}
         uses: actions/upload-artifact@v4.3.1
         with:
-          name: cypress-screenshots
+          name: cypress-screenshots-${{ secrets.site }}
           path: tests/cypress/cypress/screenshots
           retention-days: 10
 
