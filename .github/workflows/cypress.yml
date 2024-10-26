@@ -6,6 +6,8 @@ on:
         description: "API token for slack"
       site:
         description: "Site to run tests on"
+      directory:
+        description: "Directory to run tests in"
       database:
         description: "Database to pull in, normally blank"
       prnum:
@@ -40,22 +42,13 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run cypress test
-        if: ${{ !startsWith(SITE, 'accessmatch') }}
         run: |
           cd tests/cypress
           lando ssh -c 'pwd'
-          lando cypress run --config baseUrl=https://${{ secrets.site }}-local.cnctci.lndo.site -s **/${{ secrets.site }}/**
+          lando cypress run --config baseUrl=https://$SITE-local.cnctci.lndo.site -s **/$DIR/**
         env:
           SITE: ${{ secrets.site }}
-
-      - name: Run cypress test
-        if: ${{ startsWith(SITE, 'accessmatch') }}
-        run: |
-          cd tests/cypress
-          lando ssh -c 'pwd'
-          lando cypress run --config baseUrl=https://accessmatch-local.cnctci.lndo.site -s **/${{ secrets.site }}/**
-        env:
-          SITE: ${{ secrets.site }}
+          DIR: ${{ secrets.directory }}
 
       - name: Tests failed - upload screenshots to slack
         if: ${{ failure() && !cancelled() && hashFiles('tests/cypress/cypress/screenshots/**/*.png') != '' }}
