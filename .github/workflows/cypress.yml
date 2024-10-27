@@ -51,7 +51,8 @@ jobs:
           DIR: ${{ secrets.directory }}
 
       - name: Get logs
-        run: lando drush wd-show --count=100
+        if: ${{ failure() }}
+        run: lando drush wd-show --count=100000
 
       - name: Tests failed - upload screenshots to slack
         if: ${{ failure() && !cancelled() && hashFiles('tests/cypress/cypress/screenshots/**/*.png') != '' }}
