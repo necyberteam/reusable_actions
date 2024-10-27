@@ -44,7 +44,7 @@ jobs:
       - name: Run cypress test
         run: |
           cd tests/cypress
-          lando ssh -c 'pwd'
+          lando drush watchdog:delete all
           lando cypress run --config baseUrl=https://$SITE-local.cnctci.lndo.site -s **/$DIR/**
         env:
           SITE: ${{ secrets.site }}
@@ -52,7 +52,7 @@ jobs:
 
       - name: Get logs
         if: ${{ failure() }}
-        run: lando drush wd-show --count=100000
+        run: lando drush wd-show --count=10000
 
       - name: Tests failed - upload screenshots to slack
         if: ${{ failure() && !cancelled() && hashFiles('tests/cypress/cypress/screenshots/**/*.png') != '' }}
