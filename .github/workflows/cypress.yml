@@ -48,7 +48,7 @@ jobs:
           echo 'Robo test'
           vendor/bin/robo
           echo 'Cypress test'
-          vendor/bin/robo cypress $SITE
+          vendor/bin/robo cypress $DIR
         env:
           SITE: ${{ secrets.site }}
           DIR: ${{ secrets.directory }}
