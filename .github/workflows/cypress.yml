@@ -45,7 +45,7 @@ jobs:
         run: |
           cd tests/cypress
           lando drush watchdog:delete all -y
-          lando cypress run --config baseUrl=https://$SITE-local.cnctci.lndo.site -s **/$DIR/**
+          vendor/bin/robo cypress $SITE
         env:
           SITE: ${{ secrets.site }}
           DIR: ${{ secrets.directory }}
