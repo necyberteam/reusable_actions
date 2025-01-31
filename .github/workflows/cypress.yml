@@ -44,6 +44,7 @@ jobs:
       - name: Run cypress test
         run: |
           lando drush watchdog:delete all -y
+          vendor/bin/robo
           vendor/bin/robo cypress $SITE
         env:
           SITE: ${{ secrets.site }}
