@@ -45,8 +45,6 @@ jobs:
         run: |
           echo 'Clear watchdog logs'
           lando drush watchdog:delete all -y
-          echo 'Robo test'
-          vendor/bin/robo
           echo 'Cypress test'
           vendor/bin/robo cypress $DIR
         env:
