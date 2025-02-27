@@ -35,7 +35,7 @@ jobs:
       - uses: actions/checkout@v4.1.1
 
       - id: Lando
-        uses: necyberteam/amp_lando_start@v2.2
+        uses: necyberteam/amp_lando_start@v2.3
         with:
           DATABASE: ${{ secrets.DATABASE }}
           GH_TOKEN_REPO: ${{ secrets.gh_token }}
