@@ -22,7 +22,6 @@ on:
         description: "Get current repo for gh cli command to comment on PR"
       EVENT_NAME:
         description: "Event name"
-        default: "pull_request"
 permissions:
   contents: write
   actions: read
