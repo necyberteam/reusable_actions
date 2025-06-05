@@ -38,7 +38,7 @@ jobs:
 
       - id: Lando
         if: ${{ github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch' }}
-        uses: necyberteam/amp_lando_start@v2.3
+        uses: necyberteam/amp_lando_start@v2.4
         with:
           DATABASE: ${{ secrets.DATABASE }}
           GH_TOKEN_REPO: ${{ secrets.gh_token }}
